@@ -13,6 +13,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<BlogDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("BlogConnectionString")));
 
+builder.Services.AddCors(options => options.AddPolicy("default", policy =>
+{
+    policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod();
+}));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -25,6 +30,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors("default");
 
 app.MapControllers();
 
